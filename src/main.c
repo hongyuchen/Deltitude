@@ -1,7 +1,6 @@
 /*
  * main.c
- * Constructs a Window housing an output TextLayer to show data from 
- * either modes of operation of the accelerometer.
+ * Jab - Main (and only) class
  */
 
 #include <pebble.h>
@@ -165,16 +164,20 @@ static void main_window_load(Window *window) {
 
 static void main_window_unload(Window *window) {
   // Destroy output TextLayer
+  if (force_mode) {
   text_layer_destroy(s_pq_layer);
     text_layer_destroy(s_pq_label_layer);
     text_layer_destroy(s_average_pq_layer);
     text_layer_destroy(s_best_pq_layer);
     text_layer_destroy(s_total_punches_layer);
+  }
+  else {
    app_timer_cancel(update_timer);
     text_layer_destroy(s_timer_layer);
     text_layer_destroy(s_timer_label_layer);
     text_layer_destroy(s_average_freq_layer);
     text_layer_destroy(s_total_punches_layer);
+  }
 }
 
 void handle_timer(void* data) {
@@ -482,8 +485,6 @@ static void deinit() {
     accel_tap_service_unsubscribe();
 
     accel_data_service_unsubscribe();
-
-  
   
 
 }
